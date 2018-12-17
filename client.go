@@ -1,4 +1,4 @@
-package lib
+package gopedia
 
 import (
 	"encoding/json"
