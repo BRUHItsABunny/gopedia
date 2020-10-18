@@ -5,6 +5,7 @@ import (
 	gokhttp "github.com/BRUHItsABunny/gOkHttp"
 	"golang.org/x/net/html"
 	"net/http"
+	"net/url"
 	"regexp"
 	"strings"
 )
@@ -61,24 +62,24 @@ func (client *WikiClient) SearchAdvanced(term string) ([]*WikiAdvancedResult, er
 	var resp *gokhttp.HttpResponse
 	var result *WikiSearchAdvancedResponse
 
-	params := map[string]string{
-		"format":        "json",
-		"formatversion": "2",
-		"action":        "query",
-		"prop":          "description|pageimages",
-		"generator":     "prefixsearch",
-		"gpsnamespace":  "0",
-		"srnamespace":   "0",
-		"piprop":        "thumbnail",
-		"pilicense":     "any",
-		"list":          "search",
-		"srwhat":        "text",
-		"srinfo":        "suggestion",
-		"srlimit":       "1",
-		"pithumbsize":   "320",
-		"gpssearch":     term,
-		"gpslimit":      "20",
-		"srsearch":      term,
+	params := url.Values{
+		"format":        []string{"json"},
+		"formatversion": []string{"2"},
+		"action":        []string{"query"},
+		"prop":          []string{"description|pageimages"},
+		"generator":     []string{"prefixsearch"},
+		"gpsnamespace":  []string{"0"},
+		"srnamespace":   []string{"0"},
+		"piprop":        []string{"thumbnail"},
+		"pilicense":     []string{"any"},
+		"list":          []string{"search"},
+		"srwhat":        []string{"text"},
+		"srinfo":        []string{"suggestion"},
+		"srlimit":       []string{"1"},
+		"pithumbsize":   []string{"320"},
+		"gpssearch":     []string{term},
+		"gpslimit":      []string{"20"},
+		"srsearch":      []string{term},
 	}
 	req, err = client.Client.MakeGETRequest(client.BaseAPIURL, params, map[string]string{})
 	if err == nil {
@@ -104,19 +105,19 @@ func (client *WikiClient) SearchBasic(term string) ([]*WikiBasicResult, error) {
 	var resp *gokhttp.HttpResponse
 	var result WikiSearchBasicResponse
 
-	params := map[string]string{
-		"format":        "json",
-		"formatversion": "2",
-		"action":        "query",
-		"prop":          "description|pageimages",
-		"piprop":        "thumbnail",
-		"pilicense":     "any",
-		"list":          "search",
-		"srwhat":        "text",
-		"srinfo":        "suggestion",
-		"srlimit":       "1",
-		"pithumbsize":   "320",
-		"srsearch":      term,
+	params := url.Values{
+		"format":        []string{"json"},
+		"formatversion": []string{"2"},
+		"action":        []string{"query"},
+		"prop":          []string{"description|pageimages"},
+		"piprop":        []string{"thumbnail"},
+		"pilicense":     []string{"any"},
+		"list":          []string{"search"},
+		"srwhat":        []string{"text"},
+		"srinfo":        []string{"suggestion"},
+		"srlimit":       []string{"1"},
+		"pithumbsize":   []string{"320"},
+		"srsearch":      []string{term},
 	}
 	req, err = client.Client.MakeGETRequest(client.BaseAPIURL, params, map[string]string{})
 	if err == nil {
@@ -145,7 +146,7 @@ func (client *WikiClient) getPage(name string) (*WikiPage, error) {
 	var resp *gokhttp.HttpResponse
 	var result WikiPage
 
-	req, err = client.Client.MakeGETRequest(client.BasePageURL+"mobile-sections-remaining/"+name, map[string]string{}, map[string]string{})
+	req, err = client.Client.MakeGETRequest(client.BasePageURL+"mobile-sections-remaining/"+name, url.Values{}, map[string]string{})
 	if err == nil {
 		resp, err = client.Client.Do(req)
 		if err == nil {
@@ -166,7 +167,7 @@ func (client *WikiClient) getPageDetails(name string, page *WikiPage) (*WikiPage
 	var resp *gokhttp.HttpResponse
 	var result WikiDetailedResponse
 
-	req, err = client.Client.MakeGETRequest(client.BasePageURL+"mobile-sections-remaining/"+name, map[string]string{}, map[string]string{})
+	req, err = client.Client.MakeGETRequest(client.BasePageURL+"mobile-sections-remaining/"+name, url.Values{}, map[string]string{})
 	if err == nil {
 		resp, err = client.Client.Do(req)
 		if err == nil {
